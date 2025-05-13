@@ -1,0 +1,14 @@
+bind_address: "localhost:8080"
+health_check:
+  path: "/health"
+  interval: 10s
+services:
+  - name: users
+    path_prefix: "/users"
+    targets:
+      - "http://localhost:9001"
+      - "http://localhost:9002"
+  - name: orders
+    path_prefix: "/orders"
+    targets:
+      - "http://localhost:9011"
