@@ -24,7 +24,9 @@ func main() {
 
 	balancers := make(map[string]*balancer.RoundRobin)
 	for _, svc := range cfg.Services {
-		balancers[svc.PathPrefix] = balancer.NewRoundRobin(svc.Targets)
+		rr := balancer.NewRoundRobin(svc.Targets)
+		balancers[svc.PathPrefix] = rr
+		go registry.StartHealthChecker(svc, cfg.HealthCheck.Path, cfg.HealthCheck.Interval, rr)
 	}
 
 	e.Use(proxy.NewReverseProxyMiddleware(balancers))
