@@ -32,3 +32,11 @@ func (r *RoundRobin) SetTargets(ts []string) {
 
 	r.targets = ts
 }
+
+func (r *RoundRobin) GetTargets() []string {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	out := make([]string, len(r.targets))
+	copy(out, r.targets)
+	return out
+}
